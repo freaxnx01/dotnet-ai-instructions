@@ -413,7 +413,7 @@ MAJOR.MINOR.PATCH  →  e.g. 2.4.1
 - Git tags follow `v<MAJOR>.<MINOR>.<PATCH>` (e.g. `v1.3.0`) — tag on `main` after merge
 - Pre-release: `v1.0.0-alpha.1`, `v1.0.0-beta.2`, `v1.0.0-rc.1`
 - Docker images tagged with the same version + `latest` on stable releases
-- Tools like `git-cliff` or `semantic-release` can automate bump + tag from commit history
+- **git-cliff** is the changelog and release notes tool — configured via `cliff.toml`
 
 ---
 
@@ -445,7 +445,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Sections per release:** `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
 - `[Unreleased]` section accumulates changes until a release is cut
-- Auto-generation: use `git-cliff` with `cliff.toml` configured for Conventional Commits
+- Auto-generation: **git-cliff** with `cliff.toml` configured for Conventional Commits
+- CI integration: `orhun/git-cliff-action` in GitHub Actions generates release notes into GitHub Releases
 - CI can validate that `[Unreleased]` is not empty before allowing a release branch
 
 ---

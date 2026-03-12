@@ -304,7 +304,8 @@ git cliff --output CHANGELOG.md
 `CHANGELOG.md` in repo root following [Keep a Changelog](https://keepachangelog.com) format.
 
 - `[Unreleased]` section accumulates changes until a release is cut
-- Auto-generated via `git-cliff` from Conventional Commits (`cliff.toml` in repo root)
+- Auto-generated via **git-cliff** from Conventional Commits (`cliff.toml` in repo root)
+- CI integration: `orhun/git-cliff-action` in GitHub Actions generates release notes into GitHub Releases
 - CI blocks release branches if `[Unreleased]` is empty
 
 ---

@@ -326,7 +326,7 @@ Skill files located in `.ai/skills/`.
 
 - [SemVer 2.0.0](https://semver.org/): `MAJOR.MINOR.PATCH`
 - One global version for all assemblies — defined once in `Directory.Build.props` as `<Version>`, never in individual `.csproj` files
-- Conventional Commits drive version bumps automatically (via `git-cliff` or `semantic-release`):
+- Conventional Commits drive version bumps — **git-cliff** is the changelog and release notes tool:
 
 | Commit | Bump |
 |---|---|
@@ -345,7 +345,8 @@ Skill files located in `.ai/skills/`.
 - `CHANGELOG.md` in repo root — [Keep a Changelog](https://keepachangelog.com) format
 - Always maintain an `[Unreleased]` section
 - Sections per release: `Added` · `Changed` · `Deprecated` · `Removed` · `Fixed` · `Security`
-- Auto-generate with `git cliff --output CHANGELOG.md` from Conventional Commits
+- Auto-generate with `git cliff --output CHANGELOG.md` from Conventional Commits (`cliff.toml` in repo root)
+- CI integration: `orhun/git-cliff-action` in GitHub Actions generates release notes into GitHub Releases
 - When generating PR descriptions or release notes, follow this format
 
 ---
