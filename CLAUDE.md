@@ -116,6 +116,8 @@ dotnet list package --outdated
 ├── .ai/
 │   ├── base-instructions.md      ← canonical conventions reference
 │   └── skills/
+│       ├── commit.md             ← /commit slash command
+│       ├── push.md               ← /push slash command
 │       ├── ui-brainstorm.md      ← Phase 1: wireframe
 │       ├── ui-flow.md            ← Phase 2: Mermaid flows
 │       ├── ui-build.md           ← Phase 3: build
@@ -221,8 +223,12 @@ Skill files: `.ai/skills/ui-brainstorm.md`, `ui-flow.md`, `ui-build.md`, `ui-rev
 1. **Write the failing test first** — then implement
 2. **Never modify a test to make it green** — fix the implementation
 3. **No shortcuts**: no `// TODO: test later`, no empty test bodies
-4. Test naming: `MethodName_StateUnderTest_ExpectedBehavior`
-5. E2E tests must be idempotent — seed and clean up their own data
+4. **Never hardcode return values, mock results, or stub logic** to satisfy a test
+5. **Never silently swallow exceptions** to make a test green
+6. **After implementation, run the full test suite** (`dotnet test`) — not just the new test
+7. **If a test fails after 3 attempts, STOP** and explain what's going wrong instead of continuing to iterate
+8. Test naming: `MethodName_StateUnderTest_ExpectedBehavior`
+9. E2E tests must be idempotent — seed and clean up their own data
 
 ---
 
@@ -329,8 +335,24 @@ Types: `feat` `fix` `test` `refactor` `chore` `docs` `ci` `perf`
 - Magic strings — use `const` or `nameof()`
 - Direct `HttpClient` instantiation — use `IHttpClientFactory`
 - Suppressions of nullable warnings with `!` without a clear comment
+- `#nullable disable` or warning suppressions to fix build errors
 - Cross-module project references — use shared interfaces
 - Secrets in source files or appsettings
+- `Console.WriteLine` — use `ILogger<T>` always
+- Generic `catch (Exception)` — use specific exception types
+- Missing `CancellationToken` on async methods that call external resources
+- Commented-out code blocks — delete them, git has history
+
+---
+
+## Agent Guardrails
+
+- Do not install additional NuGet packages without asking first
+- Do not change project target frameworks
+- Do not modify `.csproj` files unless the task requires it
+- Do not introduce new patterns (e.g. MediatR, CQRS) unless explicitly asked
+- Do not touch files outside the scope of the current task
+- Keep changes minimal and focused — do not refactor unrelated code unless asked
 
 ---
 

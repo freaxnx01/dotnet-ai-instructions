@@ -91,6 +91,11 @@ Apply hexagonal architecture within a module when:
 - No `var` when the type is not obvious from the right-hand side
 - Prefer primary constructors (.NET 8+)
 - Central Package Management via `Directory.Packages.props` — no versions in `.csproj`
+- Use `ILogger<T>` for logging — never `Console.WriteLine`
+- Use specific exception types — not generic `catch (Exception)`
+- Use `CancellationToken` in all async methods that call external resources
+- No `#nullable disable` or warning suppressions to fix build errors
+- No commented-out code blocks — delete them, git has history
 
 ---
 
@@ -130,6 +135,10 @@ public static class OrderEndpoints
 2. Write minimum implementation to pass
 3. Refactor
 4. **Never modify a test to make it green — fix the implementation**
+5. **Never hardcode return values, mock results, or stub logic** to satisfy a test
+6. **Never silently swallow exceptions** to make a test green
+7. **After implementation, run the full test suite** (`dotnet test`) — not just the new test
+8. **If a test fails after 3 attempts, STOP** and explain what's going wrong instead of continuing to iterate
 
 ### Test Projects Structure
 
@@ -179,6 +188,9 @@ public sealed class CreateOrderHandlerTests
 - Use `Ctx.RenderComponent<T>()` with parameter builders
 - Assert on rendered markup and component state
 - Mock services via `Ctx.Services.AddSingleton<IMyService>(mock)`
+- Test event handlers: `cut.Find("button").Click()` then assert resulting state
+- Test parameter changes: `cut.SetParametersAndRender(p => p.Add(x => x.Param, newValue))`
+- Test async lifecycle: use `cut.WaitForState(() => condition)` to handle loading states
 
 ```csharp
 public sealed class OrderListComponentTests : TestContext
@@ -544,6 +556,17 @@ jobs:
     - dotnet test tests/E2E
     - docker-compose down
 ```
+
+---
+
+## Agent Guardrails
+
+- Do not install additional NuGet packages without asking first
+- Do not change project target frameworks
+- Do not modify `.csproj` files unless the task requires it
+- Do not introduce new patterns (e.g. MediatR, CQRS) unless explicitly asked
+- Do not touch files outside the scope of the current task
+- Keep changes minimal and focused — do not refactor unrelated code unless asked
 
 ---
 

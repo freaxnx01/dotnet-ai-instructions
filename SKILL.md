@@ -59,6 +59,11 @@ Testing:        xUnit + FluentAssertions + NSubstitute + bUnit + Playwright
 - `record` for DTOs, commands, queries, value objects
 - Nullable reference types — no `!` suppression without comment
 - No `var` where type is non-obvious
+- `global using` for framework namespaces in each project
+- Central Package Management via `Directory.Packages.props` — no versions in `.csproj`
+- `ILogger<T>` for logging — never `Console.WriteLine`
+- `CancellationToken` in all async methods that call external resources
+- Specific exception types — not generic `catch (Exception)`
 
 ### Never Generate
 
@@ -69,6 +74,10 @@ Testing:        xUnit + FluentAssertions + NSubstitute + bUnit + Playwright
 - Secrets or connection strings in source files
 - Cross-module project references (use shared interfaces)
 - Tests that are modified to pass (fix the implementation instead)
+- Hardcoded return values, mock results, or stub logic to satisfy a test
+- Silently swallowed exceptions to make a test green
+- `#nullable disable` or warning suppressions to fix build errors
+- Commented-out code blocks — delete them, git has history
 
 ---
 
@@ -144,6 +153,11 @@ public static class <Entity>Endpoints
 
 ## Test Generation Rules
 
+### TDD Rules
+
+- After implementation, run the full test suite (`dotnet test`) — not just the new test
+- If a test fails after 3 attempts, STOP and explain what's going wrong instead of continuing to iterate
+
 ### Unit Test Template
 
 ```csharp
@@ -189,6 +203,11 @@ public sealed class <Component>Tests : TestContext
 }
 ```
 
+**Additional bUnit techniques:**
+- Test event handlers: `cut.Find("button").Click()` then assert resulting state
+- Test parameter changes: `cut.SetParametersAndRender(p => p.Add(x => x.Param, newValue))`
+- Test async lifecycle: use `cut.WaitForState(() => condition)` to handle loading states
+
 ### Playwright E2E Template
 
 ```csharp
@@ -217,6 +236,8 @@ public sealed class <Feature>Tests : PageTest
 - Entity configuration via `IEntityTypeConfiguration<T>` only
 - No data annotations on domain models
 - `AsNoTracking()` on all read queries
+- Never use `EF.Functions` in domain/application layers — only in infrastructure queries
+- Seed data via `IEntityTypeConfiguration.HasData()` or dedicated seeder run at startup
 - Migrations in `Infrastructure/Persistence/Migrations/`
 
 ---
@@ -228,6 +249,48 @@ public sealed class <Feature>Tests : PageTest
 - Extract logic to services or ViewModels
 - `EventCallback<T>` for child-to-parent events
 - `[Parameter]` only for public component API
+
+### MudBlazor Conventions
+
+- Prefer MudBlazor components over raw HTML at all times
+- Use `MudDataGrid` for tabular data (not `MudTable` unless legacy)
+- Use `MudForm` + `MudTextField` / `MudSelect` for forms with validation
+- Use `MudDialog` for confirmations and modals (not custom overlays)
+- Use `MudSnackbar` for user feedback / toast messages
+- Use `MudSkeleton` for loading states
+- Layout: `MudLayout` → `MudAppBar` + `MudDrawer` + `MudMainContent`
+- Icons: use `Icons.Material.Filled.*` consistently
+
+### Component Conventions
+
+- One component per file
+- Component files: `PascalCase.razor`
+- Code-behind files: `PascalCase.razor.cs` (partial class)
+- Services injected via `@inject` or constructor in code-behind
+- No business logic in `.razor` files — only binding and UI events
+- Reuse components from `/src/Shared/` before creating new ones
+
+### State & Data Flow
+
+- Components do not call APIs directly — always go through a service
+- Services are registered in `Program.cs` with appropriate lifetime
+- Use `EventCallback` for child→parent communication
+- Use `CascadingParameter` only for truly global state (e.g. auth, theme)
+
+---
+
+## UI Development Workflow (Mandatory Phase Order)
+
+**Never skip phases. Never write component code before wireframe approval.**
+
+| Phase | Skill | Gate |
+|---|---|---|
+| 1 — Brainstorm | `/ui-brainstorm` | ASCII wireframe approved |
+| 2 — Flow | `/ui-flow` | Mermaid diagrams approved |
+| 3 — Build | `/ui-build` | Shell → logic → interactions → polish |
+| 4 — Review | `/ui-review` | Checklist passes |
+
+Skill files located in `.ai/skills/`.
 
 ---
 
@@ -326,6 +389,18 @@ Types: `feat` `fix` `test` `refactor` `chore` `docs` `ci` `perf`
 - [ ] HTTPS enforced
 - [ ] No direct EF queries in domain layer
 - [ ] Vulnerable package check passes
+
+---
+
+## Agent Guardrails
+
+- Do not install additional NuGet packages without asking first
+- Do not change project target frameworks
+- Do not modify `.csproj` files unless the task requires it
+- Do not introduce new patterns (e.g. MediatR, CQRS) unless explicitly asked
+- Do not touch files outside the scope of the current task
+- Keep changes minimal and focused — do not refactor unrelated code unless asked
+- If a test fails after 3 attempts, STOP and explain what's going wrong
 
 ---
 
