@@ -81,6 +81,8 @@ Apply hexagonal architecture within a module when:
   <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   <AnalysisLevel>latest-recommended</AnalysisLevel>
+  <DebugType>embedded</DebugType>
+  <DebugSymbols>true</DebugSymbols>
 </PropertyGroup>
 ```
 

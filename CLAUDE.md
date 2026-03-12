@@ -34,6 +34,8 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
 dotnet run --project src/Host
 ```
 
+**PDB symbols:** Release builds include embedded PDB symbols (`<DebugType>embedded</DebugType>` in `Directory.Build.props`) so that exception stack traces contain source file names and line numbers in production.
+
 ### Testing
 
 ```bash

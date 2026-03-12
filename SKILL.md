@@ -399,6 +399,14 @@ Types: `feat` `fix` `test` `refactor` `chore` `docs` `ci` `perf`
 
 ---
 
+## Build Conventions
+
+- Release builds include embedded PDB symbols (`<DebugType>embedded</DebugType>` in `Directory.Build.props`)
+- This ensures exception stack traces contain source file names and line numbers in production
+- Never strip PDB symbols from release or Docker builds
+
+---
+
 ## Docker Conventions
 
 - Runtime: `mcr.microsoft.com/dotnet/aspnet:10.0-alpine`
