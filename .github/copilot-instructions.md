@@ -174,3 +174,61 @@ Types: `feat`, `fix`, `test`, `refactor`, `chore`, `docs`, `ci`, `perf`
 - No magic strings — use `const` or `nameof()`
 - No direct `HttpClient` instantiation — always via `IHttpClientFactory`
 - No secrets, connection strings, or credentials in source files
+
+---
+
+## UI Development Workflow (Mandatory Phase Order)
+
+**Never skip phases. Never write component code before wireframe approval.**
+
+| Phase | Command | Gate |
+|---|---|---|
+| 1 — Brainstorm | `/ui-brainstorm` | ASCII wireframe approved |
+| 2 — Flow | `/ui-flow` | Mermaid diagrams approved |
+| 3 — Build | `/ui-build` | Shell → logic → interactions → polish |
+| 4 — Review | `/ui-review` | Checklist passes |
+
+### Phase 1 — ASCII Wireframe (`/ui-brainstorm`)
+
+Before writing any UI code, create an ASCII wireframe showing:
+- Overall layout (AppBar, Drawer, main content area)
+- Key MudBlazor regions (DataGrid, Form, Dialog, etc.)
+- Primary actions (buttons, FABs)
+- Empty state and loading state placeholders
+
+Use box-drawing characters for clarity:
+```
+┌─────────────────────────────────────┐
+│ AppBar                              │
+├──────────┬──────────────────────────┤
+│ Drawer   │ Main Content             │
+│          │                          │
+└──────────┴──────────────────────────┘
+```
+
+Save approved wireframes to `docs/design/<feature-name>/wireframe.md`.
+
+### Phase 2 — Mermaid Flow Diagrams (`/ui-flow`)
+
+After wireframe approval, map the logic with Mermaid diagrams:
+
+**Diagram 1 — User Journey** (`flowchart TD`):
+- All entry points, user decisions, branching paths
+- Error states (validation errors, API failures, 403/404)
+- Empty states, success states, exit points
+- Confirmation dialogs for destructive actions
+
+**Diagram 2 — Component & State Map**:
+- Component hierarchy (parent → children)
+- State ownership and data flow direction
+- Service injection points and API call triggers
+
+Save approved diagrams to `docs/design/<feature-name>/flow.md`.
+
+### What to Check Before Writing UI Code
+
+- [ ] Does a similar component already exist in `/src/Shared/`?
+- [ ] Has the ASCII wireframe been approved?
+- [ ] Has the Mermaid flow been approved?
+- [ ] Are you building the shell first (no business logic yet)?
+- [ ] Does the component need a bUnit test?
