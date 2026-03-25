@@ -166,6 +166,20 @@ Types: `feat`, `fix`, `test`, `refactor`, `chore`, `docs`, `ci`, `perf`
 
 ---
 
+## Clean Code Principles
+
+- **Small methods** — each method does one thing at one level of abstraction; aim for ≤20 lines
+- **Guard clauses** — validate and return/throw early at the top; avoid nested `if/else` pyramids
+- **Command-Query Separation** — a method either performs an action (command, returns `void`/`Task`) or returns data (query), never both
+- **No flag arguments** — avoid `bool` parameters that switch behaviour; split into two clearly named methods instead
+- **Meaningful names** — names reveal intent; no abbreviations (`cnt`, `mgr`, `svc`) except universally understood ones (`id`, `url`, `dto`)
+- **One level of abstraction per method** — don't mix high-level orchestration with low-level detail in the same method; extract helpers
+- **Fail fast** — detect invalid state as early as possible and throw specific exceptions; don't let bad data travel deep into the call stack
+- **DRY (Don't Repeat Yourself)** — if the same logic exists in two places, extract it; but prefer duplication over the wrong abstraction — wait until the pattern is clear before generalising
+- **No dead code** — delete unreachable branches, unused parameters, and vestigial methods; git has history
+
+---
+
 ## What NOT to Generate
 
 - No `using` statements for namespaces covered by `global using`
