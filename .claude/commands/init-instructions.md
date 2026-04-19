@@ -6,9 +6,11 @@ Context / stack (optional): $ARGUMENTS
 
 ## Steps (short)
 
-1. Fetch the list of available stacks:
-   `gh api repos/freaxnx01/ai-instructions/contents/.ai/stacks --jq '.[].name'`
-2. Confirm the stack with the user (use `$ARGUMENTS` if provided and valid). Stop if it doesn't exist.
+1. Resolve the stack in this order:
+   a. If `$ARGUMENTS` names a stack, use it (verify against source repo).
+   b. Else auto-detect from `.ai/stacks/*.md` in the target project — exactly one file → use silently (this is an update). Zero → fall through. More than one → stop and ask the user to clean up.
+   c. Else (first-time init, no argument): fetch available stacks via `gh api repos/freaxnx01/ai-instructions/contents/.ai/stacks --jq '.[].name'` and ask the user.
+2. If the chosen stack does not exist in the source repo, stop — do not silently fall back.
 3. Fetch `base-instructions.md`, `stacks/<stack>.md`, and all files under `skills/` from `main` (raw URLs).
 4. Write them into the target project:
    - `.ai/base-instructions.md`

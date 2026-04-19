@@ -30,12 +30,22 @@ A project consumes **base + exactly one stack overlay**. That is what keeps an a
 
 ### Step 1 — Choose the stack
 
-1. Fetch the list of available stacks (pick one):
-   - `gh api repos/freaxnx01/ai-instructions/contents/.ai/stacks --jq '.[].name'`
-   - or `curl -s https://api.github.com/repos/freaxnx01/ai-instructions/contents/.ai/stacks | jq -r '.[].name'`
-2. If `$ARGUMENTS` names a stack (e.g. `dotnet`), verify it exists in that list.
-3. If no argument: list the available stacks and ask the user which one to use.
-4. If the user asks for a stack that does not exist, stop and tell them — do not silently fall back. Offer: "Create `stacks/<name>.md` in the ai-instructions repo first, then re-run."
+Resolve the stack in this order:
+
+1. **If `$ARGUMENTS` names a stack**, use that. Verify it exists in the source repo (see available-stacks command below); stop if it doesn't.
+2. **Otherwise, auto-detect from disk**: list `.ai/stacks/*.md` in the target project.
+   - Exactly one file → use its basename (e.g. `dotnet.md` → `dotnet`) **silently**, as an update of an existing init.
+   - Zero files → this is a first-time init; fall through to step 3.
+   - More than one file → stop and ask the user to remove the stale ones. A project should carry exactly one stack overlay.
+3. **Still nothing resolved** (first-time init, no argument): fetch the list of available stacks and ask the user which one to use.
+
+Available-stacks command (use either):
+- `gh api repos/freaxnx01/ai-instructions/contents/.ai/stacks --jq '.[].name'`
+- `curl -s https://api.github.com/repos/freaxnx01/ai-instructions/contents/.ai/stacks | jq -r '.[].name'`
+
+If the user (or `$ARGUMENTS`) names a stack that does not exist in the source repo, stop and tell them — do not silently fall back. Offer: "Create `stacks/<name>.md` in the ai-instructions repo first, then re-run."
+
+When resolving by auto-detect, confirm in the report which stack was picked and from where (e.g. "detected `dotnet` from `.ai/stacks/dotnet.md`"), so the user can correct if it's wrong.
 
 ### Step 2 — Fetch the raw files
 
