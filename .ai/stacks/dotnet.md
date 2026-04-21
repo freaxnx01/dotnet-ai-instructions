@@ -25,6 +25,25 @@ Applies on top of `.ai/base-instructions.md` for .NET 10 / ASP.NET Core / Blazor
 | Containerization | Docker + docker-compose (Alpine base images) |
 | Testing | xUnit + FluentAssertions + NSubstitute + bUnit + Playwright |
 
+### Key Dependencies (baseline `Directory.Packages.props`)
+
+Baseline NuGet packages every project on this stack should pull in. Versions are centralised via `Directory.Packages.props` — update there, never per-project.
+
+| Package | Purpose |
+|---|---|
+| `FluentValidation.AspNetCore` | Input validation at API boundary |
+| `FluentAssertions` | Expressive test assertions |
+| `NSubstitute` | Mocking in unit tests |
+| `xunit` | Test framework |
+| `bunit` | Blazor component testing |
+| `Microsoft.Playwright` | E2E browser testing |
+| `MudBlazor` | UI component library |
+| `Serilog.AspNetCore` | Structured logging |
+| `OpenTelemetry.AspNetCore` | Traces + metrics |
+| `Microsoft.EntityFrameworkCore` | ORM |
+| `Npgsql.EntityFrameworkCore.PostgreSQL` | PostgreSQL driver |
+| `Microsoft.EntityFrameworkCore.Sqlite` | SQLite driver (small-scale projects) |
+
 ---
 
 ## Architecture — Modular Monolith
@@ -391,6 +410,15 @@ ENTRYPOINT ["dotnet", "Host.dll"]
 - Log levels: `Debug` local, `Information` production minimum
 - OpenTelemetry: export traces to OTLP collector; expose `/metrics` (Prometheus format)
 - Health checks: `/health/live` (liveness) and `/health/ready` (readiness, checks DB)
+
+### Health & Ops Endpoints
+
+| Endpoint | Purpose |
+|---|---|
+| `/health/live` | Liveness — always 200 if process is up |
+| `/health/ready` | Readiness — checks DB and required dependencies |
+| `/metrics` | Prometheus-format metrics exposed by OpenTelemetry |
+| `/scalar` | API documentation UI (OpenAPI + Scalar) |
 
 **12-Factor enforcement points for this stack:**
 - Never write to the local filesystem inside a container for application state
