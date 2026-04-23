@@ -361,6 +361,8 @@ dotnet list package --outdated
 
 Projects using this stack should ship a repo-root `Makefile` standardizing the common commands. The recipe bodies may use project-local variables (`$(SLN)`, `$(API_DIR)`, `$(PROPS_FILE)`, `$(COMPOSE)`) but the target names are canonical.
 
+A reference implementation lives at [`.ai/examples/dotnet/Makefile`](../examples/dotnet/Makefile) — copy it to your repo root and customize the top-of-file variables. Host/tool/project-specific targets (`run-edge`, `release-notes`, `package`) ship as stubs with per-OS examples in comments.
+
 Document each target with an inline `## <description>` comment and expose a `help` target that greps them.
 
 ### Build & run
