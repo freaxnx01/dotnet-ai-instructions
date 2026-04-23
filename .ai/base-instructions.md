@@ -186,6 +186,18 @@ main              ← always deployable, protected
 
 ---
 
+## Git Worktrees
+
+### Worktree directory
+
+- Use **project-local** worktrees under `.worktrees/` at the repo root (hidden directory)
+- `.worktrees/` must be listed in `.gitignore` — add and commit it before creating the first worktree in a repo
+- Use a **random, short branch name** when the user does not specify one (e.g. `wt/<8-hex-chars>`); do not prompt for a branch name
+
+Agent tooling that automates worktree creation should discover these rules from `CLAUDE.md` / `AGENTS.md` (e.g. a `worktree.*director` grep) and honour them without asking.
+
+---
+
 ## Commit Messages (Conventional Commits)
 
 ```
