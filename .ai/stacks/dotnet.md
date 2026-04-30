@@ -301,6 +301,34 @@ The phase order and gates are defined in `base-instructions.md`. For .NET/Blazor
 
 ---
 
+## Localization & Regional Formatting
+
+Base rules for language support and regional formatting live in `base-instructions.md`. For this stack:
+
+- Configure `RequestLocalizationMiddleware` in `Program.cs`:
+  ```csharp
+  var supportedCultures = new[] { "de-CH", "de-DE", "de-AT", "en-US", "en-GB" }
+      .Select(c => new CultureInfo(c)).ToList();
+  var supportedUICultures = new[] { "de", "en" }
+      .Select(c => new CultureInfo(c)).ToList();
+
+  app.UseRequestLocalization(new RequestLocalizationOptions
+  {
+      DefaultRequestCulture = new RequestCulture("de-CH", "de"),
+      SupportedCultures = supportedCultures,
+      SupportedUICultures = supportedUICultures,
+      ApplyCurrentCultureToResponseHeaders = true,
+  });
+  ```
+- Culture resolution order: cookie (`.AspNetCore.Culture`) → `Accept-Language` header → default (`de-CH` / `de`).
+- For language `de` with no recognized region (or a `de-*` region not in `SupportedCultures`), fall back to `de-CH` — not `de-DE`.
+- UI strings via `IStringLocalizer<T>` + `.resx` resources per `de` / `en`. Do not put translatable strings inline in `.razor` files.
+- Format dates / numbers / currency via `CurrentCulture` — never `string.Format` with a hardcoded culture or `CultureInfo.InvariantCulture` for user-visible text.
+- MudBlazor `MudDatePicker`, `MudNumericField`, etc. pick up `CurrentCulture` automatically — do not override per-component.
+- Provide a language switcher in the layout (`MudMenu` in `MudAppBar`) that writes the chosen language into the `.AspNetCore.Culture` cookie and reloads.
+
+---
+
 ## Entity Framework Core
 
 - One `DbContext` per module (not one global context)

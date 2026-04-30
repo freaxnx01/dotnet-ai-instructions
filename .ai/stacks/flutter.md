@@ -230,6 +230,42 @@ Phase order and gates are defined in `base-instructions.md`. For Flutter:
 
 ---
 
+## Localization & Regional Formatting
+
+Base rules for language support and regional formatting live in `base-instructions.md`. For this stack:
+
+- Add `flutter_localizations` (SDK) and `intl` to `pubspec.yaml`. Generate ARB-driven message classes via `flutter gen-l10n` — `l10n.yaml` configured for `lib/l10n/app_en.arb` and `app_de.arb`.
+- `MaterialApp` configuration:
+  ```dart
+  MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: const [
+      Locale('en'),
+      Locale('de', 'CH'),
+      Locale('de', 'DE'),
+      Locale('de', 'AT'),
+    ],
+    localeResolutionCallback: (deviceLocale, supported) {
+      if (deviceLocale?.languageCode == 'de') {
+        return supported.firstWhere(
+          (l) => l.languageCode == 'de'
+              && l.countryCode == deviceLocale!.countryCode,
+          orElse: () => const Locale('de', 'CH'), // fallback for unrecognized de-*
+        );
+      }
+      return const Locale('en');
+    },
+    locale: _userOverride, // null = follow OS
+    // ...
+  );
+  ```
+- Persist the user's language override in `shared_preferences` (key: `app.locale`); `null` means follow OS.
+- Format dates with `DateFormat.yMd(locale.toLanguageTag())`, numbers with `NumberFormat.decimalPattern(locale.toLanguageTag())`, currency with `NumberFormat.simpleCurrency(locale: locale.toLanguageTag())`.
+- Never call `.toString()` on `DateTime` / `num` for user-visible text — always go through `intl`.
+- All user-visible strings come from `AppLocalizations.of(context)` — no string literals in widget trees.
+
+---
+
 ## Essential Commands
 
 ```bash
