@@ -11,6 +11,7 @@ Canonical, stack-agnostic AI agent instructions with per-stack overlays. Each pr
                                   git-cliff, Keep a Changelog, UI phase gates)
   stacks/
     dotnet-blazor.md            ← generated: dotnet-core + Blazor layer
+    dotnet-webapi.md            ← generated: dotnet-core + WebAPI layer
     flutter.md                  ← single-file overlay (no layer split)
     _partials/
       dotnet-core.md            ← shared .NET conventions (C#, EF, Docker,
@@ -19,6 +20,10 @@ Canonical, stack-agnostic AI agent instructions with per-stack overlays. Each pr
     _layers/
       dotnet-blazor.md          ← Blazor + MudBlazor + bUnit + Playwright
                                   + UI workflow + UI-specific localization
+      dotnet-webapi.md          ← REST conventions (versioning, auth, status
+                                  codes, idempotency, ETag, rate limiting,
+                                  CORS, HTTP logging, LRO, OpenAPI/Scalar,
+                                  k6, Kiota, Bruno, integration tests)
   skills/
     commit.md           · push.md
     ui-brainstorm.md    · ui-flow.md · ui-build.md · ui-review.md
@@ -75,6 +80,7 @@ This repo's root `CLAUDE.md`, `.github/copilot-instructions.md`, and `SKILL.md` 
 | Stack | File | Covers |
 |---|---|---|
 | `dotnet-blazor` | `.ai/stacks/dotnet-blazor.md` | .NET 10 · ASP.NET Core · Blazor + MudBlazor · EF Core · xUnit / bUnit / Playwright · Serilog + OpenTelemetry · Alpine Docker |
+| `dotnet-webapi` | `.ai/stacks/dotnet-webapi.md` | .NET 10 · ASP.NET Core REST API · Asp.Versioning.Http · ProblemDetails · OpenAPI + Scalar · JWT / API key / pass-through auth · `WebApplicationFactory` + Testcontainers · Bruno · k6 · Kiota |
 | `flutter` | `.ai/stacks/flutter.md` | Flutter / Dart |
 
 To add a new stack: see *Adding a new stack* below.
@@ -98,7 +104,7 @@ Keep anything stack-agnostic (SemVer, Conventional Commits, TDD principles, Clea
 
 ### Split overlay (shared baseline + flavour layer)
 
-When a stack will have multiple flavours that share substantial content (currently: the .NET family), split the source:
+When a stack has multiple flavours that share substantial content (currently: the .NET family), split the source:
 
 ```
 .ai/stacks/
