@@ -82,6 +82,7 @@ This repo's root `CLAUDE.md`, `.github/copilot-instructions.md`, and `SKILL.md` 
 | `dotnet-blazor` | `.ai/stacks/dotnet-blazor.md` | .NET 10 · ASP.NET Core · Blazor + MudBlazor · EF Core · xUnit / bUnit / Playwright · Serilog + OpenTelemetry · Alpine Docker |
 | `dotnet-webapi` | `.ai/stacks/dotnet-webapi.md` | .NET 10 · ASP.NET Core REST API · Asp.Versioning.Http · ProblemDetails · OpenAPI + Scalar · JWT / API key / pass-through auth · `WebApplicationFactory` + Testcontainers · Bruno · k6 · Kiota |
 | `flutter` | `.ai/stacks/flutter.md` | Flutter / Dart |
+| `ci` | `.ai/stacks/ci.md` | Bash · GitHub Actions reusable workflows + composite actions · `actionlint` + `shellcheck` · `act` |
 
 To add a new stack: see *Adding a new stack* below.
 
