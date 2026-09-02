@@ -125,6 +125,21 @@ Full per-factor table: [`.ai/references/base/12-factor.md`](https://github.com/f
 
 ---
 
+## Logging
+
+Log **what the code is about to do, then what happened** — human-readable
+sentences, not just event names or codes. Two messages per operation:
+
+1. **Before attempting:** describe the action in plain language.
+2. **After it completes:** describe the outcome (success or failure), including the reason on failure.
+
+Levels: attempt → `Information` (or `Debug` for high-frequency/internal steps);
+success → `Information`; failure → `Warning`/`Error` with the exception attached.
+
+Example: [`.ai/references/base/logging-example.md`](https://github.com/freaxnx01/ai-instructions/blob/main/.ai/references/base/logging-example.md)
+
+---
+
 ## Branching Strategy (GitHub Flow + protection rules)
 
 ```text
